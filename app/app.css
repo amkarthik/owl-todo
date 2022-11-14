@@ -1,0 +1,23 @@
+.task-list {
+    width: 300px;
+    margin: 50px auto;
+    background: aliceblue;
+    padding: 10px;
+  }
+  
+  .task {
+    font-size: 18px;
+    color: #111111;
+  }
+
+  h1 {
+    color: red;
+    width: 300px;
+    margin: 50px auto;
+    padding: 10px;
+  }
+
+  .task.done {
+    opacity: 0.7;
+    text-decoration: line-through;
+  }
