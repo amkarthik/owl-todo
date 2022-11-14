@@ -1,3 +1,7 @@
-(function () {
-  console.log("hello owl", owl.__info__.version);
-})();
+const {Component, mount, xml} = owl;
+
+class Root extends Component {
+  static template = xml /*xml*/ `<h1 style="color: red">Todo App</h1>`;
+}
+
+mount(Root, document.body);
