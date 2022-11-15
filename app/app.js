@@ -1,4 +1,4 @@
-const { Component, mount, xml } = owl;
+const { Component, mount, xml, useRef, onMounted} = owl;
 
 class Task extends Component {
   static template = xml /*xml*/ `
@@ -14,15 +14,30 @@ class Task extends Component {
 class Root extends Component {
   static template = xml /*xml*/ `
   <h1 style="color: red">Todo App</h1>
-  <div class="task-list">
-    <t t-foreach="tasks" t-as="task" t-key="task.id">
-      <Task task="task" />
-    </t>
+  <div class="todo-app">
+    <input placeholder="Enter a new task" t-on-keyup="addTask" t-ref="add-input"/>
+    <div class="task-list">
+      <t t-foreach="tasks" t-as="task" t-key="task.id">
+        <Task task="task" />
+      </t>
+    </div>
   </div>
   `;
 
   static components = { Task };
+    // 13 is keycode for Enter key
+  addTask(ev) {
+    if (ev.keyCode === 13) {
+      const text = ev.target.value.trim();
+      ev.target.value = "";
+      console.log("adding Task", text);
+    }
+  }
 
+  setup() {
+    const inputRef = useRef("add-input");
+    onMounted(() => inputRef.el.focus());
+  }
 
   tasks = [
     {
