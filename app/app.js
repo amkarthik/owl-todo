@@ -1,17 +1,28 @@
-const {Component, mount, xml} = owl;
+const { Component, mount, xml } = owl;
+
+class Task extends Component {
+  static template = xml /*xml*/ `
+  <div class="task" t-att-class="props.task.isCompleted ? 'done' : ''">
+  <input type="checkbox" t-att-checked="props.task.isCompleted" />
+  <span><t t-esc="props.task.text" /></span>
+  </div>
+  `;
+  static props = ["task"];
+
+}
 
 class Root extends Component {
   static template = xml /*xml*/ `
   <h1 style="color: red">Todo App</h1>
   <div class="task-list">
     <t t-foreach="tasks" t-as="task" t-key="task.id">
-      <div class="task" t-att-class="task.isCompleted ? 'done' : ''">
-        <input type="checkbox" t-att-checked="task.isCompleted" />
-        <span><t t-esc="task.text" /></span>
-      </div>
+      <Task task="task" />
     </t>
   </div>
   `;
+
+  static components = { Task };
+
 
   tasks = [
     {
@@ -27,4 +38,4 @@ class Root extends Component {
   ];
 }
 
-mount(Root, document.body);
+mount(Root, document.body, {dev: true});
