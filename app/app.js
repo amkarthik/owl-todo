@@ -1,4 +1,4 @@
-const { Component, mount, xml, useRef, onMounted} = owl;
+const { Component, mount, xml, useRef, onMounted, useState} = owl;
 
 class Task extends Component {
   static template = xml /*xml*/ `
@@ -30,7 +30,14 @@ class Root extends Component {
     if (ev.keyCode === 13) {
       const text = ev.target.value.trim();
       ev.target.value = "";
-      console.log("adding Task", text);
+      if (text) {
+        const newTask = {
+          id: this.nextId++,
+          text: text,
+          isCompleted: false,
+        };
+        this.tasks.push(newTask);
+      }
     }
   }
 
@@ -39,18 +46,8 @@ class Root extends Component {
     onMounted(() => inputRef.el.focus());
   }
 
-  tasks = [
-    {
-      id: 1,
-      text: "code todo app in owl",
-      isCompleted: true,
-    },
-    {
-      id: 2,
-      text: "proceed further in learning owl",
-      isCompleted: false,
-    },
-  ];
+  nextId = 1;
+  tasks = useState([]);
 }
 
 mount(Root, document.body, {dev: true});
