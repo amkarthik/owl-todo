@@ -7,8 +7,12 @@ function useStore() {
 }
 
 class TaskList {
-  nextId = 1;
-  tasks = [];
+
+  constructor(tasks) {
+    this.tasks = tasks || [];
+    const taskIds = this.tasks.map((t) => t.id);
+    this.nextId = taskIds.length ? Math.max(...taskIds) + 1 : 1;
+  }
   
   addTask(text) {
     text = text.trim();
@@ -33,7 +37,12 @@ class TaskList {
 }
 
 function createTaskStore() {
-  return reactive(new TaskList());
+  // return reactive(new TaskList());
+  const saveTasks = () => localStorage.setItem("todoapp", JSON.stringify(taskStore.tasks));
+  const initialTasks = JSON.parse(localStorage.getItem("todoapp") || "[]");
+  const taskStore = reactive(new TaskList(initialTasks), saveTasks);
+  saveTasks();
+  return taskStore;
 }
 
 class Task extends Component {
