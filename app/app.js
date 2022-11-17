@@ -5,12 +5,17 @@ class Task extends Component {
   <div class="task" t-att-class="props.task.isCompleted ? 'done' : ''">
   <input type="checkbox" t-att-checked="props.task.isCompleted" t-on-click="toggleTask" />
   <span><t t-esc="props.task.text" /></span>
+  <span class="delete" t-on-click="deleteTask">🗑</span>
   </div>
   `;
-  static props = ["task"];
+  static props = ["task", "onDelete"];
 
   toggleTask() {
     this.props.task.isCompleted = !this.props.task.isCompleted;
+  }
+
+  deleteTask() {
+    this.props.onDelete(this.props.task);
   }
 
 }
@@ -22,7 +27,7 @@ class Root extends Component {
     <input placeholder="Enter a new task" t-on-keyup="addTask" t-ref="add-input"/>
     <div class="task-list">
       <t t-foreach="tasks" t-as="task" t-key="task.id">
-        <Task task="task" />
+        <Task task="task" onDelete.bind="deleteTask"/>
       </t>
     </div>
   </div>
@@ -43,6 +48,11 @@ class Root extends Component {
         this.tasks.push(newTask);
       }
     }
+  }
+
+  deleteTask(task) {
+    const index = this.tasks.findIndex(t => t.id === task.id);
+    this.tasks.splice(index, 1);
   }
 
   setup() {
